@@ -14,8 +14,7 @@ def OverlapGraph(collection):
                 aux = True
         if aux:
             graph[pattern] = adjacent
-            
-                    
+                  
     return graph
 
 class OverlapGraphTest(unittest.TestCase):
@@ -26,22 +25,4 @@ class OverlapGraphTest(unittest.TestCase):
         
 if __name__ == "__main__":
     unittest.main()
-    #print(OverlapGraph(["ATGCG","GCATG","CATGC","AGGCA","GGCAT","GGCAC"]))
-    #collection = []
-    #f = open("test.txt", "r").readlines()
-    
-    #for line in f:
-    #    collection.append("".join(line[:-1]))
-        
-    #res = OverlapGraph(collection)
-    #print(res)
-    #file = open('answer.txt', "w")
-    
-    #for key in res:
-    #    file.write(f"{key} -> ")
-    #    for elem in res[key]:
-     #       file.write(f'{elem} ')           
-      #  file.write("\n")
-        
-    #file.close()
     pass

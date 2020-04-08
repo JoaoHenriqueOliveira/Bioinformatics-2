@@ -18,6 +18,21 @@ def PathToGenome(path):
     
     return text  
 
+def base10_base2(k):
+    tmp = ''
+    
+    while k != 0:
+        tmp += str(k%2)
+        k = int(k/2)
+    tmp = tmp[::-1]
+    while len(tmp) != 4:
+        tmp = '0' + tmp
+        
+    return tmp
+
+def k_universal(numbers):
+    pass
+
 class StringCompositionTest(unittest.TestCase):
     
     def test_string_composition_problem(self):
@@ -28,5 +43,13 @@ class StringCompositionTest(unittest.TestCase):
         
 if __name__ == "__main__":
     unittest.main()
+    
+    #aux = []
+    
+    #for i in range(16):
+    #    aux.append(base10_base2(i))
+    #print(aux)
+    
+    #print(PathToGenome(aux))
     
     pass

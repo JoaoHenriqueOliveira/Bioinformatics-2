@@ -1,0 +1,79 @@
+import unittest
+
+def DeBrujinGraph(k, text):
+    k = k - 1
+    n = len(text)
+    dic = {}
+    res = [text[i:i + k] for i in range(n -  k + 1)]
+    res.sort()
+        
+    for elem in res:
+        dic[elem] = []
+    
+    for j in range(n - k):
+        dic[text[j:j + k]].append(text[j + 1: j + k + 1])
+        
+    for key in dic:
+        dic[key].sort()
+    
+    return dic
+
+def DeBrujin(patterns):
+    k = len(patterns[0])
+    graph = {}
+    
+    for k_mer in patterns:
+        graph[k_mer[0:(k - 1)]] = []
+        graph[k_mer[1:k]] = []
+    
+    for node in graph:
+        for k_mer in patterns:
+            if k_mer[0: (k - 1)] == node:
+                graph[node].append(k_mer[1:k])
+    
+    return graph
+
+class DeBrujinGraphTest(unittest.TestCase):
+    def test_de_brujin_graph(self):
+        self.assertEqual(DeBrujinGraph(4, "AAGATTCTCTAAGA"), {"AAG": ["AGA","AGA"], "AGA": ["GAT"], "ATT": ["TTC"],
+                                                              "CTA": ["TAA"], "CTC": ["TCT"], "GAT": ["ATT"], "TAA": ["AAG"], "TCT": ["CTA","CTC"],
+                                                              "TTC": ["TCT"]})
+    def test_de_brujin(self):
+        self.assertEqual(DeBrujin(["GAGG",'CAGG','GGGG','GGGA','CAGG','AGGG','GGAG']),
+                         {"AGG": ['GGG'], "CAG": ['AGG', 'AGG'], "GAG": ['AGG'], "GGA": ['GAG'], "GGG": ['GGA','GGG']})
+
+if __name__ == "__main__":
+    #print(DeBrujin(["GAGG",'CAGG','GGGG','GGGA','CAGG','AGGG','GGAG']))
+    #unittest.main()
+    #result = DeBrujinGraph(12, "GAATAGCCATCTGCCAGATAAGCGTCAGGGGGGTGATCACACTATGTGATTGCGCTAGCGATTTAGTCCAATCCCACGGACGCCAATGTCCGATTACCGGGAGGAAAACCTGAATGACCCTCCGACGATTTTCTAATTACTGTAGAGCGTCGCGGATACTGCATACTGTGGTCACTCGGAGCTTAATTGGCGTAGAATATGAGGCGTGAATGTGGCCCATCGGATGTCTCCGCTAGAACACACTTAACCTCATTTACTAGCTCTATCCGGCCATGATTCGAGTATCTTCGCGCGCTCACAGGACGATCCATATACTAATTGCCAAGCCTTCGTTTCATGACACAAGATCCGAAAATGATTGGCCAATTCATCGGGTTCCTCCCAATAACTTGCACTTGAAAGAGAAGTGTGAACGGGGTAGAGCTACTTATAGTTGCACACAAAGAACCCTTAACTACAGCTTTTTTCATCGAATGAATACAGGCAGAGCGCCAGCATAGAGGTAGTGAGCAGCTAGTACCAAAGTGGAAGATGCAGTACCAGAGACGTAACCGGAAGAAGATGCGATGGTCTGTAGCGTGGTCGCGGGAGGAACACGTCCCGAGTTTAGAGACGTCGAAGCAAAAATTATTGGGTTTAAACTGGTCCCGCGAAGCAGCTTAAATCGTACCAAATTGTCGAGCAATAGCCGTCAAGACTCTCAAGACCTCATGTCCGGACGTGCAACAATATAGAAAAGGGAGGTTACCAAAGCCACGGCTACTTAGTCATTTTTGGCGAATGGTGGTAGTTATTACCAGCCGTCCAATAAACTAGATCATCCTTGGGAAGAATCGATGGTTCTCACAGTCAAAGTCTCCGAATCCTTGGGAATCCGGATCACTGAATAACGCTTGGAACCACTGCGGACGGATACAAGGAGTCAACGTACCACAGTTTCCTGCAGCGGAAGGTCACTGTAATATATCGCTCGTTCCTCGTCAGTGATCCGTGGTTCACAAGGCAACCTGGGTTAGCTTCAGTCACCCTTACAGAAAAGATTTCGGCCGTTTAGGTTGTTACGGATGTAATCCAGGTGTTCAGTTAAGGTCGATCATAGGGCTAAAGTACTGTGCTTCAAAATTTTGTCAGACGTAATAATAGATTTCCTGGACTCTCTATATCGTGGCCCGTCCACAATCTAACGGAGCGATGCAACCCGAGTTTGTGCTAAGGTTCCGCTGGTTCGAACTATTCTCAGCCTGCAGTCAATACTCGGCAGACTGGCTGTTACGCGCTCGGCCCCAGGGCCACACGTCTTACTTAGAGCCTAGCCTGCTCATTGTTCCGTCGATAAGTGCAATAGTTAGGATTCTAACAGGCGCGACGCCAGACACTCGAGCCGTCGAATGCGACGAACTAGCTGGTTTTGGGCAGTTCCTTATTCACGGAGGACATGGTTCCTCCATCGCAACTTAGTTCCTACCCCTAGTATCCATAAGTACTATGTTTTAACTGGAGGAATTCAACAGAAGCAGTGTCGAATCATGCCACTTTGCGAACTACCGTACATGATCAACAAACTAGTCGAACTTCGCGAGCATAATCATACTCGGCCCGGGGTCAAGCCAGACCTCTTTGTTAGTAGGGAGCTCTGTGCCGCCCAGTTCCTCGGGCACGGATAAAGTGTGTGCCCCCTAGCTCCCCCCTAGTTTAAGGCCGCGCCAGTTACATGTAAATATGGGTGACCACGAACATGGTGGGGTAAACTCGTGAAGCGGACAGTAAACTGTCTCTATCGGGAGCTTACAGCAATGGTTGCGGTTTGAAACGAAGCTGTTTTAGTGTTAACTCCGAGTCCCCTGCAATCTCTATCATCTTACTCCCCTCTTTCGTCTTCCAGGAGGGCAAAAGTCTGTTACAAGCTGCTTAAGTCTTCGACCCGTTGTACTAAAATGGGGGGCTTAAGTGGCCAAAAATCACATATTCTTTCGCACTACAAGTTTGCTTCTGTCTATTCT")
+    #file = open("test.txt", "w")
+    
+    #for key in result:
+    #    if len(result[key]) != 0:
+    #        file.write(f"{key} -> ")
+    #        for elem in result[key]:
+    #            file.write(elem + " ")
+    #        file.write("\n")
+    #print(DeBrujinGraph(4, "AAGATTCTCTAAGA"))    
+    #file.close() 
+    
+    file = open("test.txt", "r").readlines()
+    aux = open("answer.txt", "w")
+    patterns = []
+    
+    for line in file:
+        patterns.append("".join(line[:-1]))
+    
+    result = DeBrujin(patterns)
+    for key in result:
+        if len(result[key]) != 0:
+            aux.write(f"{key} -> ")
+            for elem in result[key]:
+                if len(result[key]) == 1:
+                    aux.write(elem)
+                else:
+                    aux.write(elem + ",")
+            aux.write("\n")            
+    pass
+
+
