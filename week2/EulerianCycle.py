@@ -21,15 +21,13 @@ def count_nodes(graph):
 
 def EulerianPath(graph):
     n, nodes = count_nodes(graph)
-    
+    path = []
     in_deg = {}
     out_deg = {}
     
     for node in nodes:
         in_deg[node] = 0
         out_deg[node] = 0
-        
-    path = []
     
     return FindEulerianPath(in_deg, out_deg, graph, n, nodes, path)
 
@@ -101,7 +99,10 @@ class EulerianCycleTest(unittest.TestCase):
         
 if __name__ == "__main__":
     #unittest.main()
-    
+    #graph1 = {"AGG": ['GGG'], "CAG": ['AGG', 'AGG'], "GAG": ['AGG'], "GGA": ['GAG'], "GGG": ['GGA','GGG']}
+    graph1 = {'CTT': ['TTA'], 'TTA': ['TAC'], 'ACC': ['CCA'], 'CCA': [], 'TAC': ['ACC'], 'GGC': ['GCT'], 'GCT': ['CTT']}
+    print(EulerianPath(graph1))
+    #print("***********************************")
     lines = open("test.txt", "r").readlines()
     graph = {}
     for line in lines:
