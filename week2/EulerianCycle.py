@@ -1,4 +1,6 @@
 import unittest
+import sys
+sys.setrecursionlimit(5000)
 
 def count_edges(graph):
     count = 0
@@ -36,6 +38,7 @@ def FindEulerianPath(in_deg, out_deg, graph, n, nodes, path):
     in_deg, out_deg = CountInOutDegree(in_deg, out_deg, graph)
     
     if not HasEulerianPath(in_deg, out_deg):
+        print("No Eulerian Path!")
         return -1
     
     start = findStartNode(in_deg, out_deg)

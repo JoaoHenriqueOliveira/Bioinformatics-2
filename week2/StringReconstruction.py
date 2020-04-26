@@ -17,5 +17,13 @@ class string_reconstruction_test(unittest.TestCase):
         self.assertEqual(StringReconstructionProblem(["CTTA","ACCA","TACC","GGCT","GCTT","TTAC"]), "GGCTTACCA")
         
 if __name__ == "__main__":
-    unittest.main()
+    #unittest.main()
+    file = open("test.txt", "r").readlines()
+    patterns = []
+    for line in file:
+        patterns.append(line[:-1])
+    
+    #print(patterns)
+    print(StringReconstructionProblem(patterns))
+    
     pass
