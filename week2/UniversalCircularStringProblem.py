@@ -35,7 +35,6 @@ def UniversalCircularString(k):
     return text[:-(k - 1)]
 
 if __name__ == "__main__":
-    #print(base10_to_base2(3, 3))
-    #print(generate_patterns(3))
     print(UniversalCircularString(9))
+    
     pass

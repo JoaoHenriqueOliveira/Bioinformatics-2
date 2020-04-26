@@ -67,7 +67,7 @@ def dfs(at, out_deg, graph, path):
         dfs(next, out_deg, graph, path)
         
     path.append(at)
-    return path
+    return path        
     
 def CountInOutDegree(in_deg, out_deg, graph):
     
