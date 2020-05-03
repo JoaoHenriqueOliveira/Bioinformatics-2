@@ -1,8 +1,9 @@
 from EulerianCycle import EulerianPath
 import sys
 sys.path.insert(0, '../week1')
-from DeBrujinGraph import *
 from StringCompositionProblem import PathToGenome
+import sys
+sys.setrecursionlimit(8000)
 
 class Pair:
     def __init__(self, kmer1, kmer2, k = -1, d = -1):
@@ -89,9 +90,11 @@ def StringSpelledByPatterns(path, k, d):
     
     return p_string + s_string[-(k + d):]
 
-def StringReconstruction(k, d, pairs):
+def StringReconstruction(pairs, k, d,):
     graph = DeBrujin_pairs(pairs)
+    print(graph)
     path = EulerianPath(graph)
+    print(path)
     n = len(path)
     edges = []
     for i in range(n - 1):
@@ -99,10 +102,11 @@ def StringReconstruction(k, d, pairs):
         p_d = path[i].kmer2
         s_up = path[i + 1].kmer1
         s_d = path[i + 1].kmer2
-        kmer1 = p_up + s_up[1:]
-        kmer2 = p_d + s_d[1:]
+        kmer1 = p_up + s_up[-1]
+        kmer2 = p_d + s_d[-1]
         edge = Pair(kmer1, kmer2)
         edges.append(edge) 
+    
     final = StringSpelledByPatterns(edges, k, d)
     
     return final
@@ -129,25 +133,28 @@ if __name__ == "__main__":
     #print(graph)
     #print(EulerianPath(graph))
     
-    #path = [Pair("GACC", "GCGC"),Pair("ACCG", "CGCC"), Pair("CCGA", "GCCG"), Pair("CGAG", "CCGG"), Pair("GAGC", "CGGA")]
+    #path = [Pair("GACC", "GCGC"),Pair("ACCG", "CfinalGCC"), Pair("CCGA", "GCCG"), Pair("CGAG", "CCGG"), Pair("GAGC", "CGGA")]
     
     #print("******************************************")
     #path = [Pair("AG", "AG"), Pair("GC", "GC"), Pair("CA", "CT")]
     #print(StringSpelledByPatterns(path, 4, 2))
     
-    lines = open("test.txt", "r").readlines()
-    k = 50
-    d = 200
+    lines = open("carsonella_ruddii.txt", "r").readlines()
     pairs = []
-    #print(lines[-1][:50])
-    #print(lines[-1][51:-1])
-    for line in lines:
-        kmer1 = line[:k]
-        kmer2 = line[(k+1):-1]
-        node = Pair(kmer1, kmer2)
-        pairs.append(node)
-    tmp = StringSpelledByPatterns(pairs, k, d) 
-    print(tmp)
-        
+    for i, line in enumerate(lines):
+        if i == 0:
+            for index, char in enumerate(line):
+                if char == " ":
+                    k = int(line[:index])
+                    d = int(line[index + 1:-1])
+        else:       
+            kmer1 = line[:k]
+            kmer2 = line[(k+1):-1]
+            if i == 1:
+                print(f"kmer1: {kmer1}  kmer2: {kmer2}")
+            node = Pair(kmer1, kmer2)
+            pairs.append(node)
     
+    tmp = StringReconstruction(pairs, k, d)
+    print(tmp)
     pass

@@ -32,9 +32,10 @@ def UniversalCircularString(k):
     graph = DeBrujin(patterns)
     path = EulerianPath(graph)
     text = PathToGenome(path)
+    
     return text[:-(k - 1)]
 
 if __name__ == "__main__":
-    print(UniversalCircularString(9))
+    print(UniversalCircularString(2))
     
     pass

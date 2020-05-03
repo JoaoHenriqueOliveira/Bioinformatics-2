@@ -1,5 +1,6 @@
 import unittest
 import sys
+import queue
 sys.setrecursionlimit(5000)
 
 def count_edges(graph):
@@ -92,6 +93,104 @@ def HasEulerianPath(in_deg, out_deg):
             
     return(start == 0 and end == 0) or (start == 1 and end == 1)
 
+def MaximalNonBranchingPaths(graph):
+    n, nodes = count_nodes(graph)
+    paths = []
+    in_deg = {}
+    out_deg = {}
+    for node in nodes:
+        in_deg[node] = 0
+        out_deg[node] = 0
+    in_deg, out_deg = CountInOutDegree(in_deg, out_deg, graph)
+    
+    visited = {}
+    for node in nodes:
+        visited[node] = False
+    
+    for node in graph:
+        if (not(in_deg[node] == 1) or not(out_deg[node] == 1)) and not(visited[node]):
+            if out_deg[node] > 0:
+                for w in graph[node]:
+                    non_branching_path = []
+                    non_branching_path.append(node)
+                    non_branching_path.append(w)
+                    while in_deg[w] == 1 and out_deg[w] == 1:
+                        visited[w] = True
+                        for u in graph[w]:
+                            non_branching_path.append(u)
+                            w = u
+                    paths.append(non_branching_path)
+    
+    
+    for node in graph:
+        if in_deg[node] == 1 and out_deg[node] == 1 and not(visited[node]):
+            memory = node
+            for a in graph[node]:
+                isolated_cycle = []
+                isolated_cycle.append(memory)
+                while in_deg[a] == 1 and out_deg[a] == 1:
+                    isolated_cycle.append(a)
+                    visited[a] = True
+                    if a == memory:
+                        visited[memory] = True
+                        paths.append(isolated_cycle)
+                        break
+                    for v in graph[a]:
+                        a = v
+    return paths
+
+# BFS starting at node
+def BreadthFirstSearch(node, n, graph):
+    q = queue.Queue()
+    q.put(node)
+    print(node, end = ' ')
+    n, nodes = count_nodes(graph)
+    visited = {}
+    prev = {}
+    for elem in nodes:
+        visited[elem] = False
+        prev[elem] = []  #track the parent of each node, this is to help reconstruct the path
+            
+    visited[node] = True
+    
+    while not q.empty():
+        next = q.get()
+        neighbors = graph[next]
+        
+        for elem in neighbors:
+            if not visited[elem]:
+                print(elem, end = ' ')
+                q.put(elem)
+                visited[elem] = True
+                prev[elem].append(next)
+    print()
+    return prev
+
+#Application
+def FindPath(graph, s, e):
+    n = len(graph)
+    FindPath_bfs(s, e, graph, n)    
+    pass
+
+def FindPath_bfs(start, end, graph, n):
+    prev = BreadthFirstSearch(start, n, graph)
+    
+    return reconstruct_path(start, end, prev, n)
+
+def reconstruct_path(start, end, prev, n):
+    path = []
+    
+    at = end
+    while at != -1:
+        path.append(at)
+        at = prev[at]
+        
+    path.reverse()
+    if path[0] == start:
+        print(path)
+        return path
+    
+    return []
 
 class EulerianCycleTest(unittest.TestCase):
     def test_count_edges(self):
@@ -103,9 +202,10 @@ class EulerianCycleTest(unittest.TestCase):
 if __name__ == "__main__":
     #unittest.main()
     #graph1 = {"AGG": ['GGG'], "CAG": ['AGG', 'AGG'], "GAG": ['AGG'], "GGA": ['GAG'], "GGG": ['GGA','GGG']}
-    graph1 = {'CTT': ['TTA'], 'TTA': ['TAC'], 'ACC': ['CCA'], 'CCA': [], 'TAC': ['ACC'], 'GGC': ['GCT'], 'GCT': ['CTT']}
+    '''graph1 = {'CTT': ['TTA'], 'TTA': ['TAC'], 'ACC': ['CCA'], 'CCA': [], 'TAC': ['ACC'], 'GGC': ['GCT'], 'GCT': ['CTT']}
     print(EulerianPath(graph1))
     #print("***********************************")
+    '''
     lines = open("test.txt", "r").readlines()
     graph = {}
     for line in lines:
@@ -122,10 +222,20 @@ if __name__ == "__main__":
                 graph[nbr] = []
                 tmp = ''
 
-    res = EulerianPath(graph)
+    #res = EulerianPath(graph)
+    res = MaximalNonBranchingPaths(graph)
+    #print(graph)
+    for path in res:
+        N = len(path)
+        for i, node in enumerate(path):
+            if i == N - 1:
+                print(f"{node}")
+            else:
+                print(f"{node} -> ", end = "")
+        
     
-    for node in res:
-        print(f"{node}->", end = "")
-    print()
+    #graph = {1 : [2], 2: [3], 3: [4, 5], 4: [], 5: [], 6: [7], 7: [6]}
+    
+    
     
     pass
