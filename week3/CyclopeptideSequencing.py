@@ -178,15 +178,22 @@ def CycloPeptideSequencing(spectrum):
                     final.append(x)
                     #print(f"2: {final}")
                 candidates.remove(x)
-                trash.append(x)
-                
+               
                 
             elif not consistent(spectrum, LinearSpectrum(x)):
                 candidates.remove(x)
-                trash.append(x)
-        
-    return final
+                
 
+    return numberfy(final)
+def numberfy(peptides):
+    res = []
+    
+    for peptide in peptides:
+        tmp = []
+        for char in peptide:
+            tmp.append(aminoAcidMass[char])
+        res.append(tmp)
+    return res
     
 def NumberOfSubpeptides(n):
     
@@ -207,17 +214,36 @@ if __name__ == "__main__":
     print(Expand(['G','A','S','P','V','T','C','I','N','D','K','E','M','H','F','R','Y','W']))
     print(CalculateMass("RHTIY"))'''
     #print(CountingPeptides(427))
-    res = CycloPeptideSequencing([0, 113, 128, 186, 241, 299, 314, 427])
-    print(res)
     
+    lines = open("tmp.txt", "r").readlines()
+    aux = ""
+    seq = []
+    for char in lines[0]:
+        if char != " ":
+            aux += char
+        if char == " " or char == "\n":
+            seq.append(int(aux))
+            aux = ""
+    seq = [0, 97, 97, 99, 101, 103, 196, 198, 198, 200, 202, 295, 297, 299,
+            299, 301, 394, 396, 398, 400, 400, 497]
+    res = CycloPeptideSequencing(seq)
+    for elem in res:
+        n = len(elem)
+        for i, nbr in enumerate(elem):
+            if i != n - 1:
+                print(f"{nbr}-", end = "")
+            else:
+                print(nbr, end = " ")
+    
+    print()
     '''test = CyclicSpectrum("ITTHF")
     print(test)'''
     #print(CalculateMass("DIAAG"))
     #res = CyclicSpectrum("NQEL")
     #print(res)
     #parent = CyclicSpectrum("VKLFPWFNQY")
-    parent = [0, 113, 128, 186, 241, 299, 314, 427]
-    son = LinearSpectrum("I")
+   # parent = [0, 113, 128, 186, 241, 299, 314, 427]
+    #son = LinearSpectrum("I")
    # print(Expand(['G', 'A', 'S', 'P', 'V', 'T', 'C', 'I', 'L', 'N', 'D', 'K', 'Q', 'E', 'M', 'H', 'F', 'R', 'Y', 'W']))
     #print(consistent(parent, son))
     #print(CyclicSpectrum("WKI"))
