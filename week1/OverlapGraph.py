@@ -16,13 +16,7 @@ def OverlapGraph(collection):
             graph[pattern] = adjacent
                   
     return graph
-
-class OverlapGraphTest(unittest.TestCase):
-    
-    def test_overlap_graph(self):
-        self.assertEqual(OverlapGraph(["ATGCG","GCATG","CATGC","AGGCA","GGCAT","GGCAC"]), {'GCATG': ['CATGC'], 'CATGC': ['ATGCG'], 'AGGCA': ['GGCAT', 'GGCAC'], 'GGCAT': ['GCATG']})
-        
-        
+             
 if __name__ == "__main__":
-    unittest.main()
+    
     pass

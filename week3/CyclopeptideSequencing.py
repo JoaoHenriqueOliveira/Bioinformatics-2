@@ -30,10 +30,10 @@ uniqueAcidMass = {
     'V': 99,
     'T': 101,
     'C': 103,
-    'I': 113, #'L': 113,
+    'I': 113,  # 'L': 113,
     'N': 114,
     'D': 115,
-    'K': 128, #'Q': 128,
+    'K': 128,  # 'Q': 128,
     'E': 129,
     'M': 131,
     'H': 137,
@@ -46,12 +46,22 @@ uniqueAcidMass = {
 Alphabet = ['G', 'A', 'S', 'P', 'V', 'T', 'C', 'I', 'L', 'N', 'D', 'K', 'Q', 'E', 'M', 'H', 'F', 'R', 'Y', 'W']
 UniqueAlphabet = ['G', 'A', 'S', 'P', 'V', 'T', 'C', 'I', 'N', 'D', 'K', 'E', 'M', 'H', 'F', 'R', 'Y', 'W']
 
+
+def memoize(f):
+    memo = {}
+    def helper(x):
+        if x not in memo:
+            memo[x] = f(x)
+        return memo[x]
+    return helper
+
 def NumberCyclicSubpeptides(n):
     if n <= 0:
         return 0
     else:
         return n*(n - 1)
-    
+
+
 def LinearSpectrum(peptide):
     n = len(peptide)
     prefix_mass = [0 for i in range(NumberCyclicSubpeptides(n))]
@@ -64,6 +74,7 @@ def LinearSpectrum(peptide):
         return res
         
     for i, amino in enumerate(peptide):
+        #UniqueAlphabet
         for symbol in Alphabet:
             if amino == symbol:
                 prefix_mass[i] = prefix_mass[i - 1] + aminoAcidMass[amino]
@@ -79,12 +90,15 @@ def LinearSpectrum(peptide):
     
     return linear_spectrum
 
+LinearSpectrum = memoize(LinearSpectrum)
+
 def CalculateMass(peptide):
     mass = 0
     for char in peptide:
         mass += aminoAcidMass[char]
     
     return mass
+
 
 def CyclicSpectrum(peptide):
     n = len(peptide)
@@ -113,14 +127,9 @@ def CyclicSpectrum(peptide):
     #Sort
     CyclicSpectrum.sort()
     return CyclicSpectrum
-    
-def memoize(f):
-    memo = {}
-    def helper(x):
-        if x not in memo:
-            memo[x] = f(x)
-        return memo[x]
-    return helper
+
+CyclicSpectrum = memoize(CyclicSpectrum)
+
 
 def CountingPeptides(m):
     count = 0
@@ -135,11 +144,14 @@ def CountingPeptides(m):
 
     return count
 
+
 CountingPeptides = memoize(CountingPeptides)
+
 
 def BFCyclopeptideSequencing(spectrum):
     
     pass
+
 
 def consistent(parent_spectrum, son_spectrum):
            
@@ -152,12 +164,14 @@ def consistent(parent_spectrum, son_spectrum):
         
     return True
 
+
 def Expand(candidates):
     tmp = []
     for elem in candidates:
         for amino in UniqueAlphabet:
             tmp.append(elem + amino)
     return tmp
+
 
 def CycloPeptideSequencing(spectrum):
     candidates = [""]
@@ -183,21 +197,23 @@ def CycloPeptideSequencing(spectrum):
             elif not consistent(spectrum, LinearSpectrum(x)):
                 candidates.remove(x)
                 
-
     return numberfy(final)
+
+
 def numberfy(peptides):
     res = []
-    
     for peptide in peptides:
         tmp = []
         for char in peptide:
             tmp.append(aminoAcidMass[char])
         res.append(tmp)
     return res
-    
+
+
 def NumberOfSubpeptides(n):
     
     return int(n * ((n + 1) / 2) + 1)
+
 
 if __name__ == "__main__":
     #x = CountingPeptides(2000)

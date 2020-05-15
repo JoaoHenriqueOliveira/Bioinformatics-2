@@ -1,6 +1,8 @@
-import unittest
 import sys
-import queue
+try: 
+    import queue
+except ImportError:
+    import Queue as queue
 sys.setrecursionlimit(5000)
 
 def count_edges(graph):
@@ -143,7 +145,9 @@ def MaximalNonBranchingPaths(graph):
 def BreadthFirstSearch(node, n, graph):
     q = queue.Queue()
     q.put(node)
-    print(node, end = ' ')
+    
+    print(node, end = " ")
+    
     n, nodes = count_nodes(graph)
     visited = {}
     prev = {}
@@ -159,7 +163,7 @@ def BreadthFirstSearch(node, n, graph):
         
         for elem in neighbors:
             if not visited[elem]:
-                print(elem, end = ' ')
+                print(elem, end = " ")
                 q.put(elem)
                 visited[elem] = True
                 prev[elem].append(next)
@@ -192,21 +196,15 @@ def reconstruct_path(start, end, prev, n):
     
     return []
 
-class EulerianCycleTest(unittest.TestCase):
-    def test_count_edges(self):
-        self.assertEqual(count_edges({0: [3], 1: [0], 2: [1, 6], 3: [2], 4: [2], 5: [4], 6: [5, 8], 7: [9], 8: [7], 9: [6]}), 12)
-        
-    def test_has_eulerian_path(self):
-        self.assertEqual(HasEulerianPath([1, 1, 2, 1, 1, 1, 2, 1, 1, 1], [1, 1, 2, 1, 1, 1, 2, 1, 1, 1]), True)
-        
+   
 if __name__ == "__main__":
-    #unittest.main()
+    
     #graph1 = {"AGG": ['GGG'], "CAG": ['AGG', 'AGG'], "GAG": ['AGG'], "GGA": ['GAG'], "GGG": ['GGA','GGG']}
     '''graph1 = {'CTT': ['TTA'], 'TTA': ['TAC'], 'ACC': ['CCA'], 'CCA': [], 'TAC': ['ACC'], 'GGC': ['GCT'], 'GCT': ['CTT']}
     print(EulerianPath(graph1))
     #print("***********************************")
     '''
-    lines = open("test.txt", "r").readlines()
+    '''lines = open("test.txt", "r").readlines()
     graph = {}
     for line in lines:
         tmp = ''
@@ -236,6 +234,6 @@ if __name__ == "__main__":
     
     #graph = {1 : [2], 2: [3], 3: [4, 5], 4: [], 5: [], 6: [7], 7: [6]}
     
-    
+    '''
     
     pass

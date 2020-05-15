@@ -27,13 +27,10 @@ def ContigGenerationProblem(patterns):
     
     paths.sort()
     return paths
-class string_reconstruction_test(unittest.TestCase):
-    def string_reconstruction_problem_test(self):
-        self.assertEqual(StringReconstructionProblem(["CTTA","ACCA","TACC","GGCT","GCTT","TTAC"]), "GGCTTACCA")
         
 if __name__ == "__main__":
-    #unittest.main()
-    file = open("test.txt", "r").readlines()
+   
+    '''file = open("test.txt", "r").readlines()
     patterns = []
     for line in file:
         patterns.append(line[:-1])
@@ -46,5 +43,5 @@ if __name__ == "__main__":
         f.write(elem + " ")
         
     f.close()
-    print("ok")
+    print("ok")'''
     pass

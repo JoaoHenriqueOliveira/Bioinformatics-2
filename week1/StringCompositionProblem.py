@@ -1,5 +1,3 @@
-import unittest
-
 def StringCompositionProblem(text, k):
     n = len(text)
     res = []
@@ -29,27 +27,7 @@ def base10_base2(k):
         tmp = '0' + tmp
         
     return tmp
-
-def k_universal(numbers):
-    pass
-
-class StringCompositionTest(unittest.TestCase):
     
-    def test_string_composition_problem(self):
-        self.assertEqual(StringCompositionProblem('CAATCCAAC', 5), ['CAATC','AATCC','ATCCA','TCCAA','CCAAC'])
-    
-    def test_path_to_genome(self):
-        self.assertEqual(PathToGenome(['ACCGA','CCGAA','CGAAG','GAAGC','AAGCT']), "ACCGAAGCT")
-        
+      
 if __name__ == "__main__":
-    unittest.main()
-    
-    #aux = []
-    
-    #for i in range(16):
-    #    aux.append(base10_base2(i))
-    #print(aux)
-    
-    #print(PathToGenome(aux))
-    
     pass

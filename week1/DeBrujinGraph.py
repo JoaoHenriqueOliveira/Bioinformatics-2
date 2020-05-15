@@ -31,15 +31,10 @@ def DeBrujin(patterns):
     
     return graph
 
-class DeBrujinGraphTest(unittest.TestCase):
-    def test_de_brujin_graph(self):
-        self.assertEqual(DeBrujinGraph(4, "AAGATTCTCTAAGA"), {"AAG": ["AGA","AGA"], "AGA": ["GAT"], "ATT": ["TTC"],
-                                                              "CTA": ["TAA"], "CTC": ["TCT"], "GAT": ["ATT"], "TAA": ["AAG"], "TCT": ["CTA","CTC"],
-                                                              "TTC": ["TCT"]})
-   
+    
 if __name__ == "__main__":
     print(DeBrujin(["CTTA","ACCA","TACC","GGCT","GCTT","TTAC"]))
-    #unittest.main()           
+               
     pass
 
 
