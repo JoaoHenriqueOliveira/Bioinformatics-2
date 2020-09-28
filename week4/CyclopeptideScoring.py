@@ -1,8 +1,8 @@
-
 import sys
 sys.path.insert(0, '../week3')
 from CyclopeptideSequencing import *
 from collections import Counter
+
 
 def memoize(f):
     memo = {}
@@ -44,46 +44,44 @@ def LinearPeptideScoring(peptide, spectrum):
 
 
 LinearPeptideScoring = memoize(LinearPeptideScoring)
- 
+
 
 def LeaderboardCyclopeptideSequencing(spectrum, n):
     LeaderBoard = [""]
     LeaderPeptide = ""
     parentMass = max(spectrum)
     nbr = []
-    memo = []
+    # memo = []
     var1 = -int(1e9)
-    var2 = 0
-    
-
+    # var2 = 0
     while len(LeaderBoard) != 0:
         LeaderBoard = Expand(LeaderBoard)
         aux = LeaderBoard.copy()
-        for elem in aux:
-            # print(elem)
+        for elem in aux: 
             if CalculateMass(elem) == parentMass:
                 score = CycloPeptideScoring(elem, spectrum)
-                if  score > CycloPeptideScoring(LeaderPeptide, spectrum):
+
+                if score > CycloPeptideScoring(LeaderPeptide, spectrum):
                     LeaderPeptide = elem
                 if score > var1:
                     nbr = []
                     nbr.append(elem)
                     var1 = score
                 elif score == var1:
-                    nbr.append(elem)    
-                    
-                print(f"{elem} -- {score}")
-                #nbr.append(elem)
+                    nbr.append(elem)
+                
+                #print(f"{elem} -- {score}")
+                
             elif CalculateMass(elem) > parentMass:
                 LeaderBoard.remove(elem)
 
         LeaderBoard = Trim(LeaderBoard, spectrum, n)
     
     
-    for elem in nbr:
-        memo.append(numberfy(elem))
-    #numberfy(LeaderPeptide) 
-    return memo[-38:]
+    #for elem in nbr:
+     #   memo.append(numberfy(elem))
+    #memo[-38:] 
+    return numberfy(LeaderPeptide) 
 
 
 def Trim(leaderboard, spectrum, n):
@@ -150,19 +148,18 @@ if __name__ == "__main__":
 
     
     lines = open("tmp2.txt", "r").readlines()
-    #n = int(lines[0][:-1])
-    #print(n)
+    n = int(lines[0][:-1])
+    print(n)
     aux = ""
     spectrum = []
-    for nbr in lines[0]:
+    for nbr in lines[1]:
         if nbr != " " and nbr != "\n":
             aux += nbr
         else:
             spectrum.append(int(aux))
             aux = ""
-    # print(spectrum)
-    #res = LeaderboardCyclopeptideSequencing(spectrum, n)
     print(spectrum)
-    print(CycloPeptideScoring("MAMA", spectrum))
+    res = LeaderboardCyclopeptideSequencing(spectrum, n)
+    print(res)
     
     pass

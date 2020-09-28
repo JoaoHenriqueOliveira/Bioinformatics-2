@@ -1,5 +1,5 @@
 import collections
-
+'''
 aminoAcidMass = {
     'G': 57,
     'A': 71,
@@ -42,12 +42,25 @@ uniqueAcidMass = {
     'Y': 163,
     'W': 186
 }
+'''
+'''
+aminoAcidMass = {f"{str(i - 50)}": i for i in range(50, 201)} # for all range of masses
+uniqueAcidMass = {f"{str(i - 50)}": i for i in range(50, 201)} # for all range of masses
+#Alphabet = ['G', 'A', 'S', 'P', 'V', 'T', 'C', 'I', 'L', 'N', 'D', 'K', 'Q', 'E', 'M', 'H', 'F', 'R', 'Y', 'W']
+#UniqueAlphabet = ['G', 'A', 'S', 'P', 'V', 'T', 'C', 'I', 'N', 'D', 'K', 'E', 'M', 'H', 'F', 'R', 'Y', 'W']
+UniqueAlphabet = [f'{str(i - 50)}' for i in range(50, 201)] # for all range of masses
+Alphabet = [f'{str(i - 50)}' for i in range(50, 201)] # for all range of masses
+'''
+aminoAcidMass = {'0': 50, '1': 55, '2': 71, '3': 73, '4': 81, '5': 87, '6': 97, '7': 99, '8': 101, '9': 113, '10': 115, '11': 116, '12': 125, '13': 127, '14': 128, '15': 131, '16': 147, '17': 162, '18': 165, '19': 168, '20': 186, '21': 200}
+#{'0': 57, '1': 65, '2': 66, '3': 81, '4': 96, '5': 97, '6': 113, '7': 114, '8': 115, '9': 128, '10': 129, '11': 130, '12': 131, '13': 145, '14': 146, '15': 147, '16': 162, '17': 163, '18': 177, '19': 186, '20': 194}
+uniqueAcidMass = {'0': 50, '1': 55, '2': 71, '3': 73, '4': 81, '5': 87, '6': 97, '7': 99, '8': 101, '9': 113, '10': 115, '11': 116, '12': 125, '13': 127, '14': 128, '15': 131, '16': 147, '17': 162, '18': 165, '19': 168, '20': 186, '21': 200}
+Alphabet = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21']
 
-Alphabet = ['G', 'A', 'S', 'P', 'V', 'T', 'C', 'I', 'L', 'N', 'D', 'K', 'Q', 'E', 'M', 'H', 'F', 'R', 'Y', 'W']
-UniqueAlphabet = ['G', 'A', 'S', 'P', 'V', 'T', 'C', 'I', 'N', 'D', 'K', 'E', 'M', 'H', 'F', 'R', 'Y', 'W']
+UniqueAlphabet = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21']
 
 
 def memoize(f):
+
     memo = {}
     def helper(x):
         if x not in memo:
@@ -55,11 +68,22 @@ def memoize(f):
         return memo[x]
     return helper
 
+
 def NumberCyclicSubpeptides(n):
     if n <= 0:
         return 0
     else:
         return n*(n - 1)
+
+
+def CalculateMass(peptide):
+    mass = 0
+    for char in peptide:
+        mass += aminoAcidMass[char]   
+    return mass
+
+
+CalculateMass = memoize(CalculateMass)
 
 
 def LinearSpectrum(peptide):
@@ -90,14 +114,8 @@ def LinearSpectrum(peptide):
     
     return linear_spectrum
 
-LinearSpectrum = memoize(LinearSpectrum)
 
-def CalculateMass(peptide):
-    mass = 0
-    for char in peptide:
-        mass += aminoAcidMass[char]
-    
-    return mass
+LinearSpectrum = memoize(LinearSpectrum)
 
 
 def CyclicSpectrum(peptide):
@@ -128,6 +146,7 @@ def CyclicSpectrum(peptide):
     CyclicSpectrum.sort()
     return CyclicSpectrum
 
+
 CyclicSpectrum = memoize(CyclicSpectrum)
 
 
@@ -149,12 +168,10 @@ CountingPeptides = memoize(CountingPeptides)
 
 
 def BFCyclopeptideSequencing(spectrum):
-    
     pass
 
 
-def consistent(parent_spectrum, son_spectrum):
-           
+def consistent(parent_spectrum, son_spectrum):        
     son = dict((i, son_spectrum.count(i)) for i in son_spectrum)
     dad = dict((i, parent_spectrum.count(i)) for i in parent_spectrum)
     
@@ -179,21 +196,13 @@ def CycloPeptideSequencing(spectrum):
     parent_mass = spectrum[-1]
    
     while len(candidates) != 0:
-    #for k in range(3):
         candidates = Expand(candidates)
         aux = candidates.copy()
-        #print(candidates)
         for x in aux:
-            #if x == "IKW":
-                #print(x)
             if CalculateMass(x) == parent_mass:
-                #print(f"1: {x}")
                 if collections.Counter(CyclicSpectrum(x)) == collections.Counter(spectrum) and x not in final:
                     final.append(x)
-                    #print(f"2: {final}")
                 candidates.remove(x)
-               
-                
             elif not consistent(spectrum, LinearSpectrum(x)):
                 candidates.remove(x)
                 
@@ -211,8 +220,7 @@ def numberfy(peptides):
 
 
 def NumberOfSubpeptides(n):
-    
-    return int(n * ((n + 1) / 2) + 1)
+    return int(n * (n + (n - 1) / 2) + 1)
 
 
 if __name__ == "__main__":
